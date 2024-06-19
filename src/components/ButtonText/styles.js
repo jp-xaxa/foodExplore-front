@@ -6,9 +6,14 @@ export const Container = styled.button`
   gap: 0.5rem;
 
   background: none;
-  color: ${({ theme }) => theme.COLORS.LIGHT_300};
-
   border: none;
+
+  color: ${({ theme }) => theme.COLORS.LIGHT_300};
   font-size: 1.5rem;
+  font-family: Poppins;
+  font-weight: 700;
+  line-height: 2rem;
+  word-wrap: break-word;
+
   cursor: pointer;
 `

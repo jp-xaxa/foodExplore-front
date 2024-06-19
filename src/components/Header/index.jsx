@@ -1,6 +1,6 @@
 import logo from "../../assets/logo.svg"
+import iconReceipt from "../../assets/icons/Receipt.svg"
 import { FiSearch } from "react-icons/fi"
-import { PiReceiptLight } from "react-icons/pi"
 import { LuLogOut } from "react-icons/lu"
 
 import { Button } from "../Button"
@@ -23,7 +23,7 @@ export function Header() {
 
       <Button
         title="Pedidos (0)"
-        icon={PiReceiptLight}
+        icon={iconReceipt}
         className="header-button"
       />
 

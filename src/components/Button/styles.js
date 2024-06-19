@@ -19,7 +19,7 @@ export const Container = styled.button`
   align-items: center;
   justify-content: center;
 
-  > svg {
+  > img {
     margin-right: 0.5rem;
     font-size: 1.25rem;
   }
