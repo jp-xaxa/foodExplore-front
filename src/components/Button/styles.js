@@ -19,7 +19,16 @@ export const Container = styled.button`
   align-items: center;
   justify-content: center;
 
+  > svg {
+    margin-right: 0.5rem;
+    font-size: 1.25rem;
+  }
+
   &:disabled {
     opacity: 0.5;
+  }
+
+  &.header-button {
+    width: auto;
   }
 `

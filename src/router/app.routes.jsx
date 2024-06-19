@@ -5,7 +5,7 @@ import { PreviewProduct } from "../pages/PreviewProduct"
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/preview-product" element={<PreviewProduct />} />
+      <Route path="/" element={<PreviewProduct />} />
     </Routes>
   )
 }
