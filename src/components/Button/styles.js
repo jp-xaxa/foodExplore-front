@@ -10,10 +10,10 @@ export const Container = styled.button`
   color: ${({ theme }) => theme.COLORS.LIGHT_100};
 
   font-size: 0.875rem;
-  font-family: Poppins;
+  font-family: "Poppins";
   font-weight: 500;
   line-height: 1.5rem;
-  word-wrap: break-word;
+  white-space: nowrap;
 
   display: flex;
   align-items: center;
@@ -24,11 +24,32 @@ export const Container = styled.button`
     font-size: 1.25rem;
   }
 
+  transition: 0.4s;
+
   &:disabled {
-    opacity: 0.5;
+    background-color: ${({ theme }) => theme.COLORS.TINTS_TOMATO_400};
+    cursor: not-allowed;
   }
 
-  &.header-button {
+  &:hover:enabled {
+    background-color: ${({ theme }) => theme.COLORS.TINTS_TOMATO_200};
+  }
+
+  &.inline-button {
     width: auto;
+  }
+
+  &.delete {
+    background: ${({ theme }) => theme.COLORS.DARK_800};
+    border: 1px solid ${({ theme }) => theme.COLORS.DARK_800};
+
+    &:hover:enabled {
+      background: ${({ theme }) => theme.COLORS.DARK_800};
+      border: 1px solid ${({ theme }) => theme.COLORS.LIGHT_100};
+    }
+  }
+
+  &:focus-within {
+    border: 1px solid ${({ theme }) => theme.COLORS.LIGHT_100};
   }
 `

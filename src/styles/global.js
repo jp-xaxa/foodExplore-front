@@ -18,8 +18,8 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
   
-  body, input, button, textarea, a {
-    font-family: "Roboto Slab", serif;
+  body, input, button, textarea, a, label, span {
+    font-family: "Roboto", sans-serif;
     font-size: 1rem;
     outline: none;
   }
@@ -33,7 +33,7 @@ export default createGlobalStyle`
     transition: filter 0.2s;
   }
 
-  button:hover, a:hover {
+  a:hover {
     filter: brightness(0.9);
   }
 `

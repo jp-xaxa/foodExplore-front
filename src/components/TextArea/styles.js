@@ -9,7 +9,7 @@ export const Container = styled.div`
   gap: 1rem;
 
   > label,
-  input {
+  textarea {
     color: ${({ theme }) => theme.COLORS.LIGHT_400};
     font-size: 1rem;
     font-weight: 400;
@@ -18,7 +18,8 @@ export const Container = styled.div`
   }
 
   > div {
-    display: flex;
+    width: 100%;
+    height: 9rem;
     align-items: center;
 
     background: ${({ theme }) => theme.COLORS.DARK_800};
@@ -26,10 +27,12 @@ export const Container = styled.div`
     border: 1px solid ${({ theme }) => theme.COLORS.DARK_800};
     border-radius: 0.3125rem;
 
-    > input {
+    > textarea {
       width: 100%;
+      height: 100%;
       color: ${({ theme }) => theme.COLORS.LIGHT_400};
       font-size: 1rem;
+      font-family: Roboto;
       font-weight: 400;
       line-height: 1rem;
       word-wrap: break-word;
@@ -37,25 +40,15 @@ export const Container = styled.div`
       background: transparent;
       border: none;
 
+      resize: none;
+
       &::placeholder {
         color: ${({ theme }) => theme.COLORS.LIGHT_500};
       }
     }
 
-    > input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-
     &:focus-within {
       border: 1px solid ${({ theme }) => theme.COLORS.LIGHT_100};
-    }
-
-    > svg {
-      color: ${({ theme }) => theme.COLORS.LIGHT_400};
-      cursor: pointer;
-      font-size: 1rem;
     }
   }
 `

@@ -15,20 +15,28 @@ export const Container = styled.header`
 
 export const Logo = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
   gap: 0.625rem;
-
-  > h1 {
-    font-size: 1.5rem;
-    font-family: Roboto;
-    word-wrap: break-word;
-    white-space: nowrap;
-  }
 
   > img {
     width: 1.875rem;
     height: 1.875rem;
+  }
+
+  > div {
+    > h1 {
+      font-size: 1.5rem;
+      font-family: "Roboto", serif;
+      white-space: nowrap;
+    }
+
+    > p {
+      color: #82f3ff;
+      font-size: 0.75rem;
+      font-family: "Roboto", serif;
+      text-align: end;
+    }
   }
 `
 

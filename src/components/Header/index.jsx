@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../hooks/auth"
+
 import logo from "../../assets/logo.svg"
 import iconReceipt from "../../assets/icons/Receipt.svg"
 import { FiSearch } from "react-icons/fi"
@@ -9,11 +12,29 @@ import { ButtonText } from "../ButtonText"
 import { Container, Logo, Search } from "./styles"
 
 export function Header() {
+  const { user, signOut } = useAuth()
+
+  const navigate = useNavigate()
+
+  function handleSignOut() {
+    navigate("/")
+    signOut()
+  }
+
+  function handleNewDish() {
+    navigate("/new-product")
+  }
+
   return (
     <Container>
       <Logo>
         <img src={logo} alt="Logo do site" />
-        <h1>food explorer</h1>
+
+        <div>
+          <h1>food explorer</h1>
+
+          {user.role === "admin" && <p>admin</p>}
+        </div>
       </Logo>
 
       <Search>
@@ -21,13 +42,21 @@ export function Header() {
         <input placeholder="Buscar por pratos ou ingredientes" />
       </Search>
 
-      <Button
-        title="Pedidos (0)"
-        icon={iconReceipt}
-        className="header-button"
-      />
+      {user.role === "admin" ? (
+        <Button
+          title="Novo prato"
+          className="inline-button"
+          onClick={handleNewDish}
+        />
+      ) : (
+        <Button
+          title="Pedidos (0)"
+          icon={iconReceipt}
+          className="inline-button"
+        />
+      )}
 
-      <ButtonText icon={LuLogOut} />
+      <ButtonText icon={LuLogOut} onClick={handleSignOut} />
     </Container>
   )
 }

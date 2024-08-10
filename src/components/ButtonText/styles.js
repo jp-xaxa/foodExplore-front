@@ -13,7 +13,7 @@ export const Container = styled.button`
   font-family: Poppins;
   font-weight: 700;
   line-height: 2rem;
-  word-wrap: break-word;
+  white-space: nowrap;
 
   cursor: pointer;
 `

@@ -1,6 +1,8 @@
-import { PiCaretLeftBold } from "react-icons/pi"
+import { useState, useEffect } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { api } from "../../services/api"
 
-import test from "../../assets/products/Mask group-1.png"
+import { PiCaretLeftBold } from "react-icons/pi"
 
 import { Header } from "../../components/Header"
 import { Footer } from "../../components/Footer"
@@ -12,40 +14,122 @@ import { Tags } from "../../components/Tags"
 import { Container, Content, Infos } from "./styles"
 
 export function PreviewProduct() {
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const [value, setValue] = useState("")
+  const [mediaFile, setMediaFile] = useState(null)
+  const [ingredients, setIngredients] = useState([])
+
+  const navigate = useNavigate()
+  const params = useParams()
+
+  function handleBack() {
+    navigate(-1)
+  }
+
+  function handleEdit(id) {
+    navigate(`/to-edit-product/${id}`)
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`/product/${params.id}`, {
+          withCredentials: true,
+        })
+        const { data } = response
+
+        setName(data.name)
+        setDescription(data.description)
+        setValue(data.value)
+        setMediaFile(`${api.defaults.baseURL}/files/${data.media}`)
+
+        const onlyIngredients = data.ingredients.map(
+          (ingredient) => ingredient.name
+        )
+        setIngredients(onlyIngredients)
+      } catch (error) {
+        if (error.response) {
+          alert(error.response.data.message)
+        } else {
+          alert("Não foi possível carregar os dados. ⭕")
+          navigate("/")
+        }
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  console.log(ingredients)
+
   return (
     <Container>
       <Header />
 
-      <Content>
-        <ButtonText title="voltar" icon={PiCaretLeftBold} />
+      {params.id ? (
+        <Content>
+          <ButtonText
+            title="voltar"
+            icon={PiCaretLeftBold}
+            onClick={handleBack}
+          />
 
-        <div>
-          <img src={test} alt="Imagem do produto" />
+          <div>
+            <img src={mediaFile} alt="Imagem do produto" />
 
-          <Infos>
-            <h1>Salada Ravanello</h1>
+            <Infos>
+              <h1>{name}</h1>
 
-            <p>
-              Rabanetes, folhas verdes e molho agridoce salpicados com gergelim.
-              O pão naan dá um toque especial.
-            </p>
+              <p>{description}</p>
 
-            <div className="tags">
-              <Tags name="alface" />
-              <Tags name="cebola" />
-              <Tags name="pão naan" />
-              <Tags name="pepino" />
-              <Tags name="rabanete" />
-              <Tags name="tomate" />
-            </div>
+              <div className="tags">
+                {ingredients &&
+                  ingredients.map((ingredient, index) => (
+                    <Tags key={String(index)} name={ingredient} />
+                  ))}
+              </div>
 
-            <div className="control">
-              <ControlBuy />
-              <Button title="incluir ∙ R$ 25,00" />
-            </div>
-          </Infos>
-        </div>
-      </Content>
+              <div className="control">
+                <Button
+                  title="Editar prato"
+                  onClick={() => handleEdit(params.id)}
+                />
+              </div>
+            </Infos>
+          </div>
+        </Content>
+      ) : (
+        <Content>
+          <ButtonText
+            title="voltar"
+            icon={PiCaretLeftBold}
+            onClick={handleBack}
+          />
+
+          <div>
+            <img src={test} alt="Imagem do produto" />
+
+            <Infos>
+              <h1>{name}</h1>
+
+              <p>{description}</p>
+
+              <div className="tags">
+                {ingredients &&
+                  ingredients.map((ingredient, index) => (
+                    <Tags key={String(index)} name={ingredient} />
+                  ))}
+              </div>
+
+              <div className="control">
+                <ControlBuy />
+                <Button title={`incluir ∙ R$ ${value}`}  />
+              </div>
+            </Infos>
+          </div>
+        </Content>
+      )}
 
       <Footer />
     </Container>
