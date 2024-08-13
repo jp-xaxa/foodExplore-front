@@ -44,42 +44,103 @@ export const Search = styled.div`
   flex-grow: 1;
   max-width: 100%;
 
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  justify-content: center;
+  position: relative;
 
-  padding: 0.75rem 6.25rem;
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    justify-content: center;
 
-  background-color: ${({ theme }) => theme.COLORS.DARK_900};
-  color: ${({ theme }) => theme.COLORS.LIGHT_400};
+    padding: 0.75rem;
 
-  border-radius: 0.3125rem;
-
-  > svg {
-    font-size: 1.25rem;
-  }
-
-  > input {
-    flex: 4;
-
+    background-color: ${({ theme }) => theme.COLORS.DARK_900};
     color: ${({ theme }) => theme.COLORS.LIGHT_400};
-    background: transparent;
-    border: none;
 
-    font-size: 1rem;
-    font-family: Roboto;
-    font-weight: 400;
-    line-height: 1rem;
-    word-wrap: break-word;
+    border-radius: 0.3125rem;
 
-    &::placeholder {
-      color: ${({ theme }) => theme.COLORS.LIGHT_500};
+    border-radius: ${({ $active }) =>
+      $active ? "0.3125rem 0.3125rem 0 0" : "0.3125rem"};
+
+    > svg {
+      font-size: 1.25rem;
+    }
+
+    > input {
+      flex: 4;
+
+      color: ${({ theme }) => theme.COLORS.LIGHT_400};
+      background: transparent;
+      border: none;
+
       font-size: 1rem;
       font-family: Roboto;
       font-weight: 400;
       line-height: 1rem;
       word-wrap: break-word;
+
+      &::placeholder {
+        color: ${({ theme }) => theme.COLORS.LIGHT_500};
+        font-size: 1rem;
+        font-family: Roboto;
+        font-weight: 400;
+        line-height: 1rem;
+        word-wrap: break-word;
+      }
     }
+  }
+
+  .options {
+    width: 100%;
+
+    background-color: ${({ theme }) => theme.COLORS.DARK_900};
+    color: ${({ theme }) => theme.COLORS.LIGHT_400};
+
+    position: absolute;
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+
+    border-radius: 0 0 0.3125rem 0.3125rem;
+    border-top: ${({ theme, $active }) =>
+      $active ? `1px solid ${theme.COLORS.LIGHT_600}` : "none"};
+  }
+`
+
+export const Option = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+    gap: 0.3125rem;
+    align-items: end;
+    padding: 0.3125rem;
+
+    .title {
+      font-size: 1rem;
+    }
+
+    > span {
+      font-size: 0.75rem;
+    }
+  }
+
+  .category {
+    font-size: 0.875rem;
+    text-transform: lowercase;
+  }
+
+  cursor: pointer;
+
+  &:hover {
+    color: ${({ theme }) => theme.COLORS.LIGHT_100};
+    background-color: ${({ theme }) => theme.COLORS.LIGHT_700};
+    border-radius: 0.3125rem;
   }
 `

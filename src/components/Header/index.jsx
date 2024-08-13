@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { api } from "../../services/api"
 import { useAuth } from "../../hooks/auth"
 
 import logo from "../../assets/logo.svg"
@@ -9,10 +11,14 @@ import { LuLogOut } from "react-icons/lu"
 import { Button } from "../Button"
 import { ButtonText } from "../ButtonText"
 
-import { Container, Logo, Search } from "./styles"
+import { Container, Logo, Search, Option } from "./styles"
+import { GiConsoleController } from "react-icons/gi"
 
 export function Header() {
   const { user, signOut } = useAuth()
+
+  const [search, setSearch] = useState("")
+  const [data, setData] = useState([])
 
   const navigate = useNavigate()
 
@@ -24,6 +30,17 @@ export function Header() {
   function handleNewDish() {
     navigate("/new-product")
   }
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const response = await api.get(`/product/search?search=${search}`, {
+        withCredentials: true,
+      })
+      setData(response.data)
+    }
+
+    fetchProduct()
+  }, [search])
 
   return (
     <Container>
@@ -37,9 +54,39 @@ export function Header() {
         </div>
       </Logo>
 
-      <Search>
-        <FiSearch />
-        <input placeholder="Buscar por pratos ou ingredientes" />
+      <Search $active={search && data.length > 0}>
+        <div>
+          <FiSearch />
+          <input
+            placeholder="Buscar por pratos ou ingredientes"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {search && data.length > 0 && (
+          <div className="options">
+            {data &&
+              data.map((product) => (
+                <Option key={String(product.id)}>
+                  <div>
+                    <h1 className="title">{product.name}</h1>
+
+                    <span>(</span>
+                    {product.ingredients &&
+                      Array.isArray(product.ingredients) &&
+                      product.ingredients.map((ingredient) => (
+                        <span key={String(ingredient.id)}>
+                          {ingredient.name}
+                        </span>
+                      ))}
+                    <span>)</span>
+                  </div>
+
+                  <p className="category">{product.category}</p>
+                </Option>
+              ))}
+          </div>
+        )}
       </Search>
 
       {user.role === "admin" ? (
