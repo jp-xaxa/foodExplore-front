@@ -22,6 +22,10 @@ export function Header() {
 
   const navigate = useNavigate()
 
+  function handlePreview(id) {
+    navigate(`/preview-product/${id}`)
+  }
+
   function handleSignOut() {
     navigate("/")
     signOut()
@@ -67,7 +71,10 @@ export function Header() {
           <div className="options">
             {data &&
               data.map((product) => (
-                <Option key={String(product.id)}>
+                <Option
+                  key={String(product.id)}
+                  onClick={() => handlePreview(product.id)}
+                >
                   <div>
                     <h1 className="title">{product.name}</h1>
 

@@ -109,12 +109,15 @@ export const Search = styled.div`
   }
 `
 
-export const Option = styled.div`
+export const Option = styled.button`
   width: 100%;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  background: transparent;
+  border: none;
 
   > div {
     display: flex;
@@ -124,15 +127,18 @@ export const Option = styled.div`
 
     .title {
       font-size: 1rem;
+      color: ${({ theme }) => theme.COLORS.LIGHT_400};
     }
 
     > span {
       font-size: 0.75rem;
+      color: ${({ theme }) => theme.COLORS.LIGHT_400};
     }
   }
 
   .category {
     font-size: 0.875rem;
+    color: ${({ theme }) => theme.COLORS.LIGHT_400};
     text-transform: lowercase;
   }
 
