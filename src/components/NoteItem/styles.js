@@ -17,7 +17,7 @@ export const Container = styled.div`
   color: ${({ theme }) => theme.COLORS.LIGHT_100};
 
   > input {
-    width: auto;
+    width: fit-content;
     background: transparent;
     border: none;
     color: ${({ theme }) => theme.COLORS.LIGHT_100};

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
 import { api } from "../../services/api"
 
 import coverImg from "../../assets/capa.png"
@@ -46,9 +45,9 @@ export function Home() {
         <Gallery>
           <Section title="Refeições" data={meals} />
 
-          {/*<Section title="Sobremesas" />
+          <Section title="Sobremesas" data={desserts} />
 
-          <Section title="Bebidas" />*/}
+          <Section title="Bebidas" data={drinks} />
         </Gallery>
       </Content>
 

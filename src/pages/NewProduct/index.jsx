@@ -25,8 +25,8 @@ import {
 
 const categoryData = [
   { name: "Refeição" },
-  { name: "Sobremesas" },
-  { name: "Bebidas" },
+  { name: "Sobremesa" },
+  { name: "Bebida" },
 ]
 
 export function NewProduct() {

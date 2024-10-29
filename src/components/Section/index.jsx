@@ -1,98 +1,79 @@
-import { useEffect, useState, useRef } from "react"
-import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi"
+import React from "react"
+import { useNavigate } from "react-router-dom"
+
+import { FiAlertCircle } from "react-icons/fi"
+import { Button } from "../Button"
 import { CardProduct } from "../CardProduct"
-import {
-  Container,
-  CarouselWrapper,
-  ArrowLeft,
-  ArrowRight,
-  ShadowLeft,
-  ShadowRight,
-} from "./styles"
+
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation } from "swiper/modules"
+import "swiper/css"
+import "swiper/css/navigation"
+
+import { Container, ShadowLeft, ShadowRight, NoData } from "./styles"
 
 export function Section({ title, data }) {
-  const carousel = useRef()
-  const [handleWidth, setHandleWidth] = useState(0)
-  const [widthCarousel, setWidthCarousel] = useState(0)
-  const [widthCard, setWidthCard] = useState(0)
+  const navigate = useNavigate()
 
-  const [navLeft, setNavLeft] = useState(false)
-  const [navRight, setNavRight] = useState(false)
-
-  function goToPreviousProduct() {
-    setNavLeft(true)
+  function handleNewDish() {
+    navigate("/new-product")
   }
-
-  function goToNextProduct() {
-    setNavRight(true)
-  }
-
-  //console.log(handleWidth, widthCarousel, widthCard)
-
-  //useEffect para quando clicar para ir para esquerda
-  useEffect(() => {
-    if (handleWidth >= -widthCard / 2) {
-      setHandleWidth(0)
-    } else if (handleWidth <= -widthCarousel) {
-      setHandleWidth(handleWidth + widthCard / 2)
-    } else {
-      setHandleWidth(handleWidth + widthCard)
-    }
-
-    setNavLeft(false)
-  }, [navLeft])
-
-  //useEffect para quando clicar para ir para direita
-  useEffect(() => {
-    if (handleWidth <= -widthCard / 2) {
-      setHandleWidth(handleWidth - widthCard / 2)
-    } else if (handleWidth <= -widthCarousel) {
-      setHandleWidth(-widthCarousel)
-    } else {
-      setHandleWidth(handleWidth - widthCard)
-    }
-    setNavRight(false)
-  }, [navRight])
-
-  //useEffect para pegar as informações dos elementos
-  useEffect(() => {
-    if (carousel.current && carousel.current.firstElementChild) {
-      setWidthCarousel(
-        carousel.current?.scrollWidth - carousel.current?.offsetWidth
-      )
-
-      setWidthCard(carousel.current.firstElementChild.offsetWidth)
-    }
-  }, [])
 
   return (
     <Container>
       <h1>{title}</h1>
 
-      <ArrowLeft onClick={goToPreviousProduct} disabled={handleWidth >= 0}>
-        <PiCaretLeftBold />
-      </ArrowLeft>
+      {data.length > 0 ? (
+        <Swiper
+          grabCursor={true}
+          loop={true}
+          breakpoints={{
+            "@0.00": {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
+            "@0.75": {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            "@1.00": {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
+            "@1.20": {
+              slidesPerView: data.length <= 4 ? 3 : 4,
+              spaceBetween: 160,
+            },
+          }}
+          navigation={true}
+          modules={[Navigation]}
+          className="mySwiper"
+        >
+          {data.length > 3 && <ShadowLeft />}
 
-      <ShadowLeft $toAppear={handleWidth >= 0} />
+          {data.map((item, index) => (
+            <SwiperSlide key={String(index)}>
+              <CardProduct data={item} />
+            </SwiperSlide>
+          ))}
 
-      <CarouselWrapper
-        $translateX={handleWidth}
-        ref={carousel}
-        $widthCarousel={widthCarousel}
-      >
-        {data.map((item) => (
-          <CardProduct key={String(item.id)} data={item} />
-        ))}
-      </CarouselWrapper>
+          {data.length > 3 && <ShadowRight />}
+        </Swiper>
+      ) : (
+        <>
+          <NoData>
+            <FiAlertCircle />
 
-      <ShadowRight $toAppear={handleWidth <= -widthCarousel} />
+            <p>Você não adicionou nenhum produto nessa categoria ainda!</p>
 
-      <ArrowRight
-        onClick={goToNextProduct}
-        disabled={handleWidth <= -widthCarousel}
-      >
-        <PiCaretRightBold />
-      </ArrowRight>
+            <Button
+              title="Novo produto"
+              className="inline-button"
+              onClick={handleNewDish}
+            />
+          </NoData>
+        </>
+      )}
     </Container>
   )
 }
