@@ -110,6 +110,8 @@ export const SelectImage = styled.label`
 
     cursor: pointer;
 
+    position: relative;
+
     > svg {
       font-size: 1.5rem;
     }
@@ -121,14 +123,18 @@ export const SelectImage = styled.label`
     }
 
     > input {
-      display: none;
+      position: absolute;
+      inset: 0;
+      opacity: 0;
     }
 
     &::placeholder {
       color: ${({ theme }) => theme.COLORS.LIGHT_500};
     }
+  }
 
-    &:focus {
+  &:focus-within {
+    > div {
       border: 1px solid ${({ theme }) => theme.COLORS.LIGHT_100};
     }
   }

@@ -14,8 +14,6 @@ export function Routes() {
 
   useEffect(() => {
     api.get("/users/validated", { withCredentials: true }).catch((error) => {
-      console.log(error)
-
       if (error.response?.status === 401) {
         signOut()
       }
@@ -26,7 +24,7 @@ export function Routes() {
     switch (user.role) {
       case USER_ROLE.ADMIN:
         return <AdminRoutes />
-      case USER_ROLE.CUSTOMER:
+      case USER_ROLE.CLIENT:
         return <ClientsRoutes />
     }
   }

@@ -41,7 +41,7 @@ export function Section({ title, data }) {
               spaceBetween: 40,
             },
             "@1.20": {
-              slidesPerView: data.length <= 4 ? 3 : 4,
+              slidesPerView: data.length === 4 ? 3 : 4,
               spaceBetween: 160,
             },
           }}
