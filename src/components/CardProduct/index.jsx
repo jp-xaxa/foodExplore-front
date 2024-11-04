@@ -1,8 +1,9 @@
-import { useParams, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/auth"
 import { api } from "../../services/api"
 
 import { FiHeart } from "react-icons/fi"
+import { FaHeart } from "react-icons/fa"
 import { PiPencilSimpleLight } from "react-icons/pi"
 
 import { Button } from "../Button"
@@ -25,6 +26,15 @@ export function CardProduct({ data }) {
     navigate(`/preview-product/${id}`)
   }
 
+  async function handleAddToFavorites(id) {
+    try {
+      await api.post(`/favorite/${id}`, { withCredentials: true })
+      alert("Adicionado produto à lista de favoritos!")
+    } catch (error) {
+      alert(error.message || "Ocorreu um erro ao adicionar aos favoritos")
+    }
+  }
+
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "..."
@@ -41,7 +51,10 @@ export function CardProduct({ data }) {
             onClick={() => handleEdit(data.id)}
           />
         ) : (
-          <ButtonText icon={FiHeart} />
+          <ButtonText
+            icon={FiHeart}
+            onClick={() => handleAddToFavorites(data.id)}
+          />
         )}
       </IconButton>
       <img src={media} alt="Imagem do produto" />

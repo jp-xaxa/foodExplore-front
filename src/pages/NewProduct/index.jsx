@@ -137,7 +137,7 @@ export function NewProduct() {
         }
       )
 
-      if (mediaFile) {
+      if (mediaFile instanceof File) {
         const fileUploadForm = new FormData()
         fileUploadForm.append("media", mediaFile)
 

@@ -61,8 +61,6 @@ export function PreviewProduct() {
     fetchData()
   }, [])
 
-  console.log(ingredients)
-
   return (
     <Container>
       <Header />
@@ -124,7 +122,7 @@ export function PreviewProduct() {
 
               <div className="control">
                 <ControlBuy />
-                <Button title={`incluir ∙ R$ ${value}`}  />
+                <Button title={`incluir ∙ R$ ${value}`} />
               </div>
             </Infos>
           </div>
