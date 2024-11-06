@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/auth"
 import { api } from "../../services/api"
+import { useFavoriteList } from "../../hooks/favoriteList"
 
 import { FiHeart } from "react-icons/fi"
 import { FaHeart } from "react-icons/fa"
@@ -11,11 +12,18 @@ import { ButtonText } from "../ButtonText"
 import { ControlBuy } from "../ControlBuy"
 
 import { Container, IconButton } from "./styles"
+import { useEffect, useState } from "react"
 
 export function CardProduct({ data }) {
   const { user } = useAuth()
+  const {
+    favoriteList,
+    handleAddProductToFavoriteList,
+    handleRemoveProductToFavoriteList,
+  } = useFavoriteList()
   const media = `${api.defaults.baseURL}/files/${data.media}`
-
+  const [checkFavoriteList, setCheckFavoriteList] = useState(false)
+  console.log(favoriteList)
   const navigate = useNavigate()
 
   function handleEdit(id) {
@@ -26,21 +34,17 @@ export function CardProduct({ data }) {
     navigate(`/preview-product/${id}`)
   }
 
-  async function handleAddToFavorites(id) {
-    try {
-      await api.post(`/favorite/${id}`, { withCredentials: true })
-      alert("Adicionado produto à lista de favoritos!")
-    } catch (error) {
-      alert(error.message || "Ocorreu um erro ao adicionar aos favoritos")
-    }
-  }
-
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "..."
     }
     return description
   }
+
+  useEffect(() => {
+    const isFavorite = favoriteList.some((product) => product.id === data.id)
+    setCheckFavoriteList(isFavorite)
+  }, [favoriteList, data.id])
 
   return (
     <Container>
@@ -50,10 +54,15 @@ export function CardProduct({ data }) {
             icon={PiPencilSimpleLight}
             onClick={() => handleEdit(data.id)}
           />
+        ) : checkFavoriteList === true ? (
+          <ButtonText
+            icon={FaHeart}
+            onClick={() => handleRemoveProductToFavoriteList(data.id)}
+          />
         ) : (
           <ButtonText
             icon={FiHeart}
-            onClick={() => handleAddToFavorites(data.id)}
+            onClick={() => handleAddProductToFavoriteList(data.id)}
           />
         )}
       </IconButton>
