@@ -31,8 +31,8 @@ export function Header() {
     signOut()
   }
 
-  function handleNewDish() {
-    navigate("/new-product")
+  function handleNavigate(page) {
+    navigate(page)
   }
 
   useEffect(() => {
@@ -96,11 +96,26 @@ export function Header() {
         )}
       </Search>
 
+      {user.role === "client" && (
+        <ButtonText
+          title="Meus favoritos"
+          className="inline-button link"
+          onClick={() => handleNavigate("/my-favorites")}
+        />
+      )}
+
+      {user.role === "client" && (
+        <ButtonText
+          title="Historico de pedidos"
+          className="inline-button link"
+        />
+      )}
+
       {user.role === "admin" ? (
         <Button
           title="Novo prato"
           className="inline-button"
-          onClick={handleNewDish}
+          onClick={() => handleNavigate("/new-product")}
         />
       ) : (
         <Button

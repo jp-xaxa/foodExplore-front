@@ -23,7 +23,7 @@ export function CardProduct({ data }) {
   } = useFavoriteList()
   const media = `${api.defaults.baseURL}/files/${data.media}`
   const [checkFavoriteList, setCheckFavoriteList] = useState(false)
-  console.log(favoriteList)
+
   const navigate = useNavigate()
 
   function handleEdit(id) {

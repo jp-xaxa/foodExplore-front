@@ -16,4 +16,10 @@ export const Container = styled.button`
   white-space: nowrap;
 
   cursor: pointer;
+
+  &.link {
+    font-size: 1rem;
+    line-height: 1rem;
+    font-weight: 400;
+  }
 `
