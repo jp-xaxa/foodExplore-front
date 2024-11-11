@@ -5,6 +5,7 @@ export const FavoriteListContext = createContext({})
 
 function FavoriteListProvider({ children }) {
   const [favoriteList, setFavoriteList] = useState([])
+  console.log(favoriteList)
 
   async function handleAddProductToFavoriteList(id) {
     try {

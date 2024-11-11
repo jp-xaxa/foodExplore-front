@@ -56,6 +56,7 @@ export const Product = styled.div`
       font-weight: 500;
       line-height: 2rem;
       color: ${({ theme }) => theme.COLORS.LIGHT_300};
+      cursor: pointer;
     }
 
     > button {

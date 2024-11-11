@@ -20,7 +20,9 @@ export function MyFavorite() {
     navigate(-1)
   }
 
-  useEffect(() => {}, [])
+  function handlePreview(id) {
+    navigate(`/preview-product/${id}`)
+  }
 
   return (
     <Container>
@@ -37,14 +39,16 @@ export function MyFavorite() {
 
         <div>
           {favoriteList.map((product) => (
-            <Product key={String(product.di)}>
+            <Product key={String(product.id)}>
               <img
                 src={`${api.defaults.baseURL}/files/${product.media}`}
                 alt="Mídia do produto"
               />
 
               <div>
-                <h1>{product.name}</h1>
+                <h1 onClick={() => handlePreview(product.id)}>
+                  {product.name}
+                </h1>
 
                 <button
                   onClick={() => handleRemoveProductToFavoriteList(product.id)}
