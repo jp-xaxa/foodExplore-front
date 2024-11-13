@@ -17,6 +17,11 @@ export const Container = styled.button`
 
   cursor: pointer;
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &.link {
     font-size: 1rem;
     line-height: 1rem;

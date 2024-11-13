@@ -5,13 +5,12 @@ export const FavoriteListContext = createContext({})
 
 function FavoriteListProvider({ children }) {
   const [favoriteList, setFavoriteList] = useState([])
-  console.log(favoriteList)
 
   async function handleAddProductToFavoriteList(id) {
     try {
       await api.post(`/favorite/${id}`, {}, { withCredentials: true })
       alert("Adicionado produto à lista de favoritos!")
-      fetchList() // Atualiza a lista após adicionar
+      fetchList()
     } catch (error) {
       console.error(error) // Para debug
       alert(error.message || "Ocorreu um erro ao adicionar aos favoritos")
@@ -22,9 +21,9 @@ function FavoriteListProvider({ children }) {
     try {
       await api.delete(`/favorite/${id}`, { withCredentials: true })
       alert("Retirado produto da lista de favoritos!")
-      fetchList() // Atualiza a lista após remover
+      fetchList()
     } catch (error) {
-      console.error(error) // Para debug
+      console.error(error)
       alert(error.message || "Ocorreu um erro ao remover dos favoritos")
     }
   }
@@ -34,7 +33,7 @@ function FavoriteListProvider({ children }) {
       const response = await api.get(`/favorite/`, { withCredentials: true })
       setFavoriteList(response.data)
     } catch (error) {
-      console.error(error) // Para debug
+      console.error(error) 
       alert(error.message || "Ocorreu um erro ao carregar os favoritos")
     }
   }

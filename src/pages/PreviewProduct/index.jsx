@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { api } from "../../services/api"
+import { useAuth } from "../../hooks/auth"
+import { useOrders } from "../../hooks/orders"
 
 import { PiCaretLeftBold } from "react-icons/pi"
 
@@ -14,11 +16,16 @@ import { Tags } from "../../components/Tags"
 import { Container, Content, Infos } from "./styles"
 
 export function PreviewProduct() {
+  const { user } = useAuth()
+  const { handleAddOrders } = useOrders()
+
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [value, setValue] = useState("")
   const [mediaFile, setMediaFile] = useState(null)
   const [ingredients, setIngredients] = useState([])
+  const [product, setProduct] = useState(null)
+  const [quantity, setQuantity] = useState(1)
 
   const navigate = useNavigate()
   const params = useParams()
@@ -31,6 +38,10 @@ export function PreviewProduct() {
     navigate(`/to-edit-product/${id}`)
   }
 
+  function handleToInclude() {
+    handleAddOrders(product, quantity)
+  }
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,15 +50,7 @@ export function PreviewProduct() {
         })
         const { data } = response
 
-        setName(data.name)
-        setDescription(data.description)
-        setValue(data.value)
-        setMediaFile(`${api.defaults.baseURL}/files/${data.media}`)
-
-        const onlyIngredients = data.ingredients.map(
-          (ingredient) => ingredient.name
-        )
-        setIngredients(onlyIngredients)
+        setProduct(data)
       } catch (error) {
         if (error.response) {
           alert(error.response.data.message)
@@ -60,12 +63,12 @@ export function PreviewProduct() {
 
     fetchData()
   }, [])
-
+  console.log(product)
   return (
     <Container>
       <Header />
 
-      {params.id ? (
+      {product && (
         <Content>
           <ButtonText
             title="voltar"
@@ -74,56 +77,36 @@ export function PreviewProduct() {
           />
 
           <div>
-            <img src={mediaFile} alt="Imagem do produto" />
+            <img
+              src={`${api.defaults.baseURL}/files/${product.media}`}
+              alt="Imagem do produto"
+            />
 
             <Infos>
-              <h1>{name}</h1>
+              <h1>{product.name}</h1>
 
-              <p>{description}</p>
-
-              <div className="tags">
-                {ingredients &&
-                  ingredients.map((ingredient, index) => (
-                    <Tags key={String(index)} name={ingredient} />
-                  ))}
-              </div>
-
-              <div className="control">
-                <Button
-                  title="Editar prato"
-                  onClick={() => handleEdit(params.id)}
-                />
-              </div>
-            </Infos>
-          </div>
-        </Content>
-      ) : (
-        <Content>
-          <ButtonText
-            title="voltar"
-            icon={PiCaretLeftBold}
-            onClick={handleBack}
-          />
-
-          <div>
-            <img src={test} alt="Imagem do produto" />
-
-            <Infos>
-              <h1>{name}</h1>
-
-              <p>{description}</p>
+              <p>{product.description}</p>
 
               <div className="tags">
-                {ingredients &&
-                  ingredients.map((ingredient, index) => (
-                    <Tags key={String(index)} name={ingredient} />
-                  ))}
+                {product.ingredients.map((ingredient) => (
+                  <Tags key={String(ingredient.id)} name={ingredient.name} />
+                ))}
               </div>
 
-              <div className="control">
-                <ControlBuy />
-                <Button title={`incluir ∙ R$ ${value}`} />
-              </div>
+              {user.role === "admin" ? (
+                <div className="control">
+                  <Button
+                    title="Editar prato"
+                    onClick={() => handleEdit(product.id)}
+                  />
+                </div>
+              ) : (
+                <div className="control">
+                  <ControlBuy setQuantity={setQuantity} quantity={quantity} />
+
+                  <Button title="incluir" onClick={handleToInclude} />
+                </div>
+              )}
             </Infos>
           </div>
         </Content>

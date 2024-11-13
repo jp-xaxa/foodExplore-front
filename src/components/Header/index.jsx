@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { api } from "../../services/api"
 import { useAuth } from "../../hooks/auth"
+import { useOrders } from "../../hooks/orders"
 
 import logo from "../../assets/logo.svg"
 import iconReceipt from "../../assets/icons/Receipt.svg"
@@ -16,9 +17,11 @@ import { GiConsoleController } from "react-icons/gi"
 
 export function Header() {
   const { user, signOut } = useAuth()
+  const { orders } = useOrders()
 
   const [search, setSearch] = useState("")
   const [data, setData] = useState([])
+  const [totalOrders, setTotalOrders] = useState(0)
 
   const navigate = useNavigate()
 
@@ -45,6 +48,18 @@ export function Header() {
 
     fetchProduct()
   }, [search])
+
+  useEffect(() => {
+    let sum = 0
+
+    if (orders && orders.length > 0) {
+      for (const order of orders) {
+        sum = sum + order.quantity
+      }
+    }
+
+    setTotalOrders(sum)
+  }, [orders])
 
   return (
     <Container>
@@ -119,9 +134,10 @@ export function Header() {
         />
       ) : (
         <Button
-          title="Pedidos (0)"
+          title={`Pedidos (${totalOrders})`}
           icon={iconReceipt}
           className="inline-button"
+          onClick={() => handleNavigate("/orders")}
         />
       )}
 

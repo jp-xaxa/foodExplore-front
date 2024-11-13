@@ -16,7 +16,7 @@ export function SignIn() {
 
   const { signIn } = useAuth()
 
-  function handleSignIn() {
+  function handleSignIn(event) {
     event.preventDefault()
 
     if (!email || !password) {

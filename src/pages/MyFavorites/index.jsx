@@ -9,7 +9,6 @@ import { Footer } from "../../components/Footer"
 import { ButtonText } from "../../components/ButtonText"
 
 import { Container, Content, Product } from "./styles"
-import { useEffect, useState } from "react"
 
 export function MyFavorite() {
   const { favoriteList, handleRemoveProductToFavoriteList } = useFavoriteList()

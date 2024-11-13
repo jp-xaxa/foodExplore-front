@@ -3,43 +3,48 @@ import React, { createContext, useContext, useState, useEffect } from "react"
 export const OrdersContext = createContext({})
 
 function OrdersProvider({ children }) {
-  const [orders, setOrders] = useState({})
+  const [orders, setOrders] = useState([])
 
-  function handleAddOrders(item) {
+  function handleAddOrders(item, quantity) {
     setOrders((prevOrders) => {
-      const existingOrder = prevOrders.find((order) => order.id === item.id)
+      const updatedOrders = (() => {
+        const existingOrder = prevOrders.find((order) => order.id === item.id)
 
-      if (existingOrder) {
-        // Se o item já existe, aumenta a quantidade
-        return prevOrders.map((order) =>
-          order.id === item.id
-            ? { ...order, quantity: order.quantity + 1 }
-            : order
-        )
-      } else {
-        // Se o item não existe, adiciona o novo item com quantidade 1
-        return [...prevOrders, { ...item, quantity: 1 }]
-      }
+        if (existingOrder) {
+          return prevOrders.map((order) =>
+            order.id === item.id
+              ? { ...order, quantity: order.quantity + quantity }
+              : order
+          )
+        } else {
+          return [...prevOrders, { ...item, quantity }]
+        }
+      })()
+
+      localStorage.setItem(
+        "@foodExplorer:orders",
+        JSON.stringify(updatedOrders)
+      )
+
+      return updatedOrders
     })
+
+    alert("Item adicionado ao pedido")
   }
 
   function handleRemoveOrders(itemId) {
-    setOrders((prevOrders) => {
-      const existingOrder = prevOrders.find((order) => order.id === itemId)
-
-      if (existingOrder && existingOrder.quantity > 1) {
-        // Se o item existe e a quantidade é maior que 1, diminui a quantidade
-        return prevOrders.map((order) =>
-          order.id === itemId
-            ? { ...order, quantity: order.quantity - 1 }
-            : order
-        )
-      } else {
-        // Se a quantidade é 1 ou o item não existe, remove o item da lista
-        return prevOrders.filter((order) => order.id !== itemId)
-      }
-    })
+    setOrders((prevOrders) => prevOrders.filter((order) => order.id !== itemId))
   }
+
+  useEffect(() => {
+    const storedOrders = localStorage.getItem("@foodExplorer:orders")
+    // Verifica se há dados no localStorage e se não, define como um array vazio
+    if (storedOrders) {
+      setOrders(JSON.parse(storedOrders))
+    } else {
+      setOrders([])
+    }
+  }, [])
 
   return (
     <OrdersContext.Provider
@@ -53,9 +58,7 @@ function OrdersProvider({ children }) {
 function useOrders() {
   const context = useContext(OrdersContext)
   if (!context) {
-    throw new Error(
-      "useOrders deve ser usado dentro de um FavoriteListProvider"
-    )
+    throw new Error("useOrders deve ser usado dentro de um OrdersProvider")
   }
   return context
 }

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../hooks/auth"
 import { api } from "../../services/api"
 import { useFavoriteList } from "../../hooks/favoriteList"
+import { useOrders } from "../../hooks/orders"
 
 import { FiHeart } from "react-icons/fi"
 import { FaHeart } from "react-icons/fa"
@@ -21,8 +22,10 @@ export function CardProduct({ data }) {
     handleAddProductToFavoriteList,
     handleRemoveProductToFavoriteList,
   } = useFavoriteList()
+  const { handleAddOrders } = useOrders()
   const media = `${api.defaults.baseURL}/files/${data.media}`
   const [checkFavoriteList, setCheckFavoriteList] = useState(false)
+  const [quantity, setQuantity] = useState(1)
 
   const navigate = useNavigate()
 
@@ -34,6 +37,10 @@ export function CardProduct({ data }) {
     navigate(`/preview-product/${id}`)
   }
 
+  function handleToInclude() {
+    handleAddOrders(data, quantity)
+  }
+
   const truncateDescription = (description, maxLength) => {
     if (description.length > maxLength) {
       return description.slice(0, maxLength) + "..."
@@ -42,8 +49,10 @@ export function CardProduct({ data }) {
   }
 
   useEffect(() => {
-    const isFavorite = favoriteList.some((product) => product.id === data.id)
-    setCheckFavoriteList(isFavorite)
+    if (user.role === "client") {
+      const isFavorite = favoriteList.some((product) => product.id === data.id)
+      setCheckFavoriteList(isFavorite)
+    }
   }, [favoriteList, data.id])
 
   return (
@@ -72,9 +81,9 @@ export function CardProduct({ data }) {
       <h1>R$ {data.value}</h1>
       {user.role === "client" && (
         <div>
-          <ControlBuy />
+          <ControlBuy setQuantity={setQuantity} quantity={quantity} />
 
-          <Button title="incluir" />
+          <Button title="incluir" onClick={handleToInclude} />
         </div>
       )}
     </Container>
