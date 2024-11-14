@@ -17,7 +17,7 @@ import { GiConsoleController } from "react-icons/gi"
 
 export function Header() {
   const { user, signOut } = useAuth()
-  const { orders } = useOrders()
+  const { orders, clear } = useOrders()
 
   const [search, setSearch] = useState("")
   const [data, setData] = useState([])
@@ -30,6 +30,7 @@ export function Header() {
   }
 
   function handleSignOut() {
+    clear()
     navigate("/")
     signOut()
   }
@@ -123,6 +124,7 @@ export function Header() {
         <ButtonText
           title="Historico de pedidos"
           className="inline-button link"
+          onClick={() => handleNavigate("/orders-history")}
         />
       )}
 

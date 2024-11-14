@@ -4,6 +4,7 @@ import { api } from "../../services/api"
 import { useOrders } from "../../hooks/orders"
 
 import { PiCaretLeftBold } from "react-icons/pi"
+import { FiAlertCircle } from "react-icons/fi"
 import pix from "../../assets/icons/Pix.svg"
 import cartao from "../../assets/icons/CreditCard.svg"
 import qrcode from "../../assets/icons/QRcode.svg"
@@ -24,6 +25,7 @@ import {
   Buy,
   PaymentType,
   PaymentInfos,
+  NoData,
 } from "./styles"
 
 export function Orders() {
@@ -40,7 +42,7 @@ export function Orders() {
   useEffect(() => {
     let sum = 0
 
-    if (orders & (orders.length > 0)) {
+    if (orders && orders.length > 0) {
       for (const order of orders) {
         sum = sum + order.value * order.quantity
       }
@@ -60,87 +62,105 @@ export function Orders() {
           onClick={handleBack}
         />
 
-        <div>
-          <List>
-            <h1>Meus pedidos</h1>
+        {totalValue > 0 ? (
+          <div>
+            <List>
+              <h1>Meus pedidos</h1>
 
-            {orders.map((item) => (
-              <Product key={String(item.id)}>
-                <img
-                  src={`${api.defaults.baseURL}/files/${item.media}`}
-                  alt="Mídia do produto"
-                />
+              {orders.map((item) => (
+                <Product key={String(item.id)}>
+                  <img
+                    src={`${api.defaults.baseURL}/files/${item.media}`}
+                    alt="Mídia do produto"
+                  />
 
-                <div>
-                  <h1>
-                    {item.quantity} x {item.name} <span>R$ ${item.value}</span>
-                  </h1>
+                  <div>
+                    <h1>
+                      {item.quantity} x {item.name}{" "}
+                      <span>R$ ${item.value}</span>
+                    </h1>
 
-                  <button onClick={() => handleRemoveOrders(item.id)}>
-                    Excluir
-                  </button>
-                </div>
-              </Product>
-            ))}
+                    <button onClick={() => handleRemoveOrders(item.id)}>
+                      Excluir
+                    </button>
+                  </div>
+                </Product>
+              ))}
 
-            <TotalValue>
-              <p>Total: R$ {totalValue}</p>
-            </TotalValue>
-          </List>
+              <TotalValue>
+                <p>Total: R$ {totalValue}</p>
+              </TotalValue>
+            </List>
 
-          <Buy>
-            <h1>Pagamento</h1>
+            <Buy>
+              <h1>Pagamento</h1>
 
-            <div>
               <div>
-                <PaymentType
-                  className="right"
-                  onClick={() => setPaymentType("pix")}
-                  $active={paymentType === "pix"}
-                >
-                  <img src={pix} alt="Svg do icone do pix" />
+                <div>
+                  <PaymentType
+                    className="right"
+                    onClick={() => setPaymentType("pix")}
+                    $active={paymentType === "pix"}
+                  >
+                    <img src={pix} alt="Svg do icone do pix" />
 
-                  <p>Pix</p>
-                </PaymentType>
+                    <p>Pix</p>
+                  </PaymentType>
 
-                <PaymentType
-                  className="left"
-                  onClick={() => setPaymentType("cartão de crédito")}
-                  $active={paymentType === "cartão de crédito"}
-                >
-                  <img src={cartao} alt="Svg de cartão de crédito" />
+                  <PaymentType
+                    className="left"
+                    onClick={() => setPaymentType("cartão de crédito")}
+                    $active={paymentType === "cartão de crédito"}
+                  >
+                    <img src={cartao} alt="Svg de cartão de crédito" />
 
-                  <p>Crédito</p>
-                </PaymentType>
+                    <p>Crédito</p>
+                  </PaymentType>
+                </div>
+
+                {paymentType === "pix" ? (
+                  <PaymentInfos>
+                    <img src={qrcode} alt="Icone de um QRcode" />
+                    <p>Tipo de pagamento indisponível!</p>
+                  </PaymentInfos>
+                ) : (
+                  <PaymentInfos>
+                    <form>
+                      <div>
+                        <Input
+                          title="Número do cartão"
+                          placeholder="0000 0000 0000 0000"
+                        />
+                      </div>
+
+                      <div>
+                        <Input title="Validade" placeholder="04/25" />
+
+                        <Input title="CVC" placeholder="000" />
+                      </div>
+
+                      <Button icon={iconReceipt} title="Finalizar pagamento" />
+                    </form>
+                  </PaymentInfos>
+                )}
               </div>
+            </Buy>
+          </div>
+        ) : (
+          <NoData>
+            <div>
+              <FiAlertCircle />
 
-              {paymentType === "pix" ? (
-                <PaymentInfos>
-                  <img src={qrcode} alt="Icone de um QRcode" />
-                </PaymentInfos>
-              ) : (
-                <PaymentInfos>
-                  <form>
-                    <div>
-                      <Input
-                        title="Número do cartão"
-                        placeholder="0000 0000 0000 0000"
-                      />
-                    </div>
+              <p>Você não adicionou nenhum produto a sua lista!</p>
 
-                    <div>
-                      <Input title="Validade" placeholder="04/25" />
-
-                      <Input title="CVC" placeholder="000" />
-                    </div>
-
-                    <Button icon={iconReceipt} title="Finalizar pagamento" />
-                  </form>
-                </PaymentInfos>
-              )}
+              <Button
+                title="Voltar"
+                className="inline-button"
+                onClick={handleBack}
+              />
             </div>
-          </Buy>
-        </div>
+          </NoData>
+        )}
       </Content>
 
       <Footer />

@@ -158,6 +158,8 @@ export const PaymentInfos = styled.div`
   padding: 2.875rem 8.125rem;
 
   display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
   align-items: center;
   justify-content: center;
 
@@ -173,6 +175,29 @@ export const PaymentInfos = styled.div`
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+  }
+`
+
+export const NoData = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex !important;
+  flex-direction: center;
+  justify-content: center;
+
+  > div {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+
+    > svg {
+      font-size: 3.125rem;
     }
   }
 `

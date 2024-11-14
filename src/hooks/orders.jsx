@@ -36,6 +36,12 @@ function OrdersProvider({ children }) {
     setOrders((prevOrders) => prevOrders.filter((order) => order.id !== itemId))
   }
 
+  function clear() {
+    localStorage.removeItem("@foodexplorer:orders")
+
+    setOrders([])
+  }
+
   useEffect(() => {
     const storedOrders = localStorage.getItem("@foodExplorer:orders")
     // Verifica se há dados no localStorage e se não, define como um array vazio
@@ -48,7 +54,7 @@ function OrdersProvider({ children }) {
 
   return (
     <OrdersContext.Provider
-      value={{ orders, handleAddOrders, handleRemoveOrders }}
+      value={{ orders, handleAddOrders, handleRemoveOrders, clear }}
     >
       {children}
     </OrdersContext.Provider>

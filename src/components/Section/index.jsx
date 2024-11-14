@@ -1,5 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../hooks/auth"
 
 import { FiAlertCircle } from "react-icons/fi"
 import { Button } from "../Button"
@@ -13,6 +14,7 @@ import "swiper/css/navigation"
 import { Container, ShadowLeft, ShadowRight, NoData } from "./styles"
 
 export function Section({ title, data }) {
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   function handleNewDish() {
@@ -60,19 +62,21 @@ export function Section({ title, data }) {
           {data.length > 3 && <ShadowRight />}
         </Swiper>
       ) : (
-        <>
-          <NoData>
-            <FiAlertCircle />
+        <NoData>
+          <FiAlertCircle />
 
+          {user.role === "admin" ? (
             <p>Você não adicionou nenhum produto nessa categoria ainda!</p>
+          ) : (
+            <p>Nenhum produto disponível ainda nessa categoria!</p>
+          )}
 
-            <Button
-              title="Novo produto"
-              className="inline-button"
-              onClick={handleNewDish}
-            />
-          </NoData>
-        </>
+          <Button
+            title="Novo produto"
+            className="inline-button"
+            onClick={handleNewDish}
+          />
+        </NoData>
       )}
     </Container>
   )
